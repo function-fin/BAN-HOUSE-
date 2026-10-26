@@ -2,6 +2,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local CoreGui = game:GetService("CoreGui")
 local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
 
 -- Limpeza de sessões anteriores
 if CoreGui:FindFirstChild("BanHouse_V32_Final") then 
@@ -91,6 +92,20 @@ end
 -- 2. INTERFACE REDESENHADA
 --====================================
 local ScreenGui = Instance.new("ScreenGui", CoreGui); ScreenGui.Name = "BanHouse_V32_Final"
+ScreenGui.IgnoreGuiInset = true
+ScreenGui.ResetOnSpawn = false
+
+-- ADAPTAÇÃO AUTOMÁTICA DE ESCALA (+80% NO PC, PADRÃO NO MOBILE)
+local uiScale = Instance.new("UIScale", ScreenGui)
+local function updateUIScale()
+    if not UserInputService.TouchEnabled then
+        uiScale.Scale = 1.8 -- Aumenta 80% no PC
+    else
+        uiScale.Scale = 1.0 -- Mantém tamanho padrão no mobile
+    end
+end
+UserInputService:GetPropertyChangedSignal("TouchEnabled"):Connect(updateUIScale)
+updateUIScale()
 
 -- Botão Flutuante de Abrir
 local OpenBtn = Instance.new("ImageButton", ScreenGui)
